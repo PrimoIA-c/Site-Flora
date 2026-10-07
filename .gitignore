@@ -1,0 +1,23 @@
+# Dépendances
+node_modules/
+
+# Build Next.js
+.next/
+out/
+build/
+
+# Variables d'environnement (clés secrètes : ne jamais publier)
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Divers
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vercel
+.netlify
+*.tsbuildinfo
+next-env.d.ts
