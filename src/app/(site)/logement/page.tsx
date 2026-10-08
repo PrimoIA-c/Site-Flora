@@ -5,6 +5,7 @@ import { Arrow, ButtonLink } from "@/components/motion/Ripple";
 import { TideReveal } from "@/components/motion/TideReveal";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { RoomPhotos } from "@/components/site/RoomPhotos";
+import { EquipmentIcon } from "@/components/site/EquipmentIcon";
 import { formatEUR } from "@/lib/dates";
 import { getAvailabilityData, getSettings, listPublicPhotos } from "@/lib/db";
 import { lowestPrice } from "@/lib/pricing";
@@ -100,35 +101,28 @@ export default async function LogementPage() {
 
       {/* Équipements */}
       <TideReveal className="bg-sable-2">
-        <section className="container-x grid gap-12 py-24 md:grid-cols-12 md:py-32">
+        <section className="container-x grid gap-12 py-16 md:grid-cols-12 md:py-24">
           <div className="md:col-span-4">
             <SectionTitle eyebrow="Équipements" title="Ce que vous trouverez" accent={["trouverez"]} />
+            <p className="mt-4 text-marine/70">Tout le nécessaire pour un séjour sans rien oublier.</p>
           </div>
-          <ul className="grid gap-x-10 sm:grid-cols-2 md:col-span-8">
-            {settings.equipment.map((e) => (
-              <li key={e.label} className={`flex items-center gap-4 border-b border-marine/10 py-4 ${e.enabled ? "" : "text-marine/70 line-through decoration-marine/30"}`}>
-                <span
-                  aria-hidden
-                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-[4px] border ${e.enabled ? "border-marine bg-marine text-phare" : "border-marine/30"}`}
-                >
-                  {e.enabled && (
-                    <svg viewBox="0 0 12 12" className="h-3 w-3">
-                      <path d="M2 6.5 5 9l5-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
-                  )}
-                </span>
-                <span>
-                  {e.label}
-                  <span className="sr-only">{e.enabled ? " : disponible" : " : non disponible"}</span>
-                </span>
-              </li>
-            ))}
+          <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:col-span-8 md:gap-3 lg:grid-cols-5">
+            {settings.equipment
+              .filter((e) => e.enabled)
+              .map((e) => (
+                <li key={e.label} className="flex items-center gap-3 rounded-lg bg-ecume px-3.5 py-3 shadow-[0_12px_30px_-24px_rgba(14,35,56,0.6)] ring-1 ring-marine/10 lg:flex-col lg:items-start lg:px-4 lg:py-4">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-marine text-phare">
+                    <EquipmentIcon label={e.label} />
+                  </span>
+                  <span className="text-sm leading-snug md:text-[0.95rem]">{e.label}</span>
+                </li>
+              ))}
           </ul>
         </section>
       </TideReveal>
 
       {/* Règlement intérieur */}
-      <section className="bg-ecume py-24 md:py-32">
+      <section className="bg-ecume py-16 md:py-24">
         <div className="container-x grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <SectionTitle eyebrow="Règlement intérieur" title="Quelques règles de bon voisinage" accent={["voisinage"]} />

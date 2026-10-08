@@ -172,7 +172,7 @@ html.lenis body {
     padding: 0 0.3em;
     border-radius: 3px;
     font-weight: 600;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
 }
 

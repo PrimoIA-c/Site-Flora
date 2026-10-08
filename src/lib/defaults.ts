@@ -30,11 +30,11 @@ export const defaultEquipment = [
   { label: "Four", enabled: true },
   { label: "Lave-vaisselle", enabled: true },
   { label: "Lave-linge", enabled: true },
-  { label: "Vaisselle complète (assiettes, verres, couverts)", enabled: true },
-  { label: "Canapé-lit (2 couchages)", enabled: true },
-  { label: "Linge de lit et serviettes", enabled: true },
+  { label: "Vaisselle complète", enabled: true },
+  { label: "Canapé-lit 2 places", enabled: true },
+  { label: "Linge de maison", enabled: true },
   { label: "Télévision", enabled: true },
-  { label: "Fer et planche à repasser", enabled: true },
+  { label: "Fer à repasser", enabled: true },
 ];
 
 export const defaultHouseRules = [

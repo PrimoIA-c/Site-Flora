@@ -10,7 +10,7 @@
 export const siteConfig = {
   name: "Super Papa de Flora",
   shortName: "Super Papa",
-  tagline: "Un appartement à Saint-Malo, à cent pas de la mer",
+  tagline: "Un appartement de caractère à Saint-Servan, à quatre minutes de la plage",
   locale: "fr_FR",
 
   location: {
@@ -32,6 +32,14 @@ export const siteConfig = {
     { label: "Tour Solidor", distance: "900 m", minutes: "15 min à pied" },
     { label: "Intra-Muros", distance: "1,1 km", minutes: "20 min à pied" },
   ],
+
+  /**
+   * Avis voyageurs RÉELS (copiés d'Airbnb, Booking…). Tant que la liste est vide, la section est masquée.
+   * Exemple : { name: "Claire", date: "août 2026", text: "…", source: "Airbnb" }
+   */
+  reviews: [] as { name: string; date: string; text: string; source?: string }[],
+  /** Note affichée à côté du titre des avis, ex. "4,9/5 · 32 avis Airbnb" */
+  reviewsSummary: "",
 
   capacity: { adults: 2, children: 2 },
 

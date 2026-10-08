@@ -10,6 +10,7 @@ import { HeroImmersive } from "@/components/site/HeroImmersive";
 import { VisitStory, type VisitScene } from "@/components/site/VisitStory";
 import { NearbyMap } from "@/components/site/NearbyMap";
 import { PhotoFrame } from "@/components/site/PhotoFrame";
+import { EquipmentIcon } from "@/components/site/EquipmentIcon";
 import { formatEUR } from "@/lib/dates";
 import { getAvailabilityData, getSettings, listPublicPhotos } from "@/lib/db";
 import { lowestPrice } from "@/lib/pricing";
@@ -142,7 +143,7 @@ export default async function HomePage() {
 
       {/* ═══ INTRO ═══ */}
       <TideReveal className="bg-sable-2">
-        <section className="container-x grid items-center gap-12 py-24 md:grid-cols-12 md:py-32">
+        <section className="container-x grid items-center gap-12 py-16 md:grid-cols-12 md:py-24">
           <div className="md:col-span-6">
             <SectionTitle eyebrow="Le logement" title="Une maison de vacances, version appartement" accent={["vacances,"]} />
             <FadeUp delay={0.2}>
@@ -187,26 +188,42 @@ export default async function HomePage() {
       </div>
 
       {/* ═══ ÉQUIPEMENTS ═══ */}
-      <TideReveal className="bg-marine text-ecume">
-        <section className="container-x grid gap-12 py-24 md:grid-cols-12 md:py-32">
-          <div className="md:col-span-5">
-            <SectionTitle eyebrow="Équipements" title="Tout est prêt, même le seau et la pelle" accent={["pelle"]} dark />
+      <section className="relative overflow-hidden bg-marine text-ecume" aria-label="Équipements">
+        <div aria-hidden className="granite-grain absolute inset-0 opacity-40" />
+        <div className="container-x relative grid gap-10 py-16 md:grid-cols-12 md:items-center md:py-20">
+          <div className="md:col-span-4">
+            <p className="eyebrow mb-4 flex items-center gap-3 text-phare">
+              <span className="h-px w-8 bg-phare" /> Équipements
+            </p>
+            <h2 className="text-3xl md:text-4xl">
+              Tout est prêt, <span className="italic text-phare" style={{ fontVariationSettings: '"SOFT" 100' }}>posez les valises</span>
+            </h2>
+            <p className="mt-4 text-ecume/70">Linge fourni, cuisine complète, canapé-lit : il ne manque que vous.</p>
+            <Link href="/logement" className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-phare">
+              Tout le détail <Arrow />
+            </Link>
           </div>
-          <ul className="grid gap-x-10 sm:grid-cols-2 md:col-span-7">
+          <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:col-span-8 md:gap-3 lg:grid-cols-5">
             {equipment.map((e, i) => (
-              <FadeUp as="li" key={e.label} delay={(i % 6) * 0.05} className="flex items-center gap-4 border-b border-ecume/10 py-4">
-                  <svg aria-hidden viewBox="0 0 20 20" className="h-4 w-4 shrink-0 text-phare">
-                    <path d="M2 10 C 5 6, 8 14, 11 10 S 16 6, 18 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
-                  {e.label}
+              <FadeUp
+                as="li"
+                key={e.label}
+                delay={(i % 6) * 0.04}
+                y={12}
+                className="group flex items-center gap-3 rounded-lg bg-ecume/[0.06] px-3.5 py-3 ring-1 ring-ecume/10 transition-colors hover:bg-ecume/[0.12] lg:flex-col lg:items-start lg:gap-3 lg:px-4 lg:py-4"
+              >
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-phare/15 text-phare transition-transform duration-500 group-hover:-rotate-6">
+                  <EquipmentIcon label={e.label} />
+                </span>
+                <span className="text-sm leading-snug md:text-[0.95rem]">{e.label}</span>
               </FadeUp>
             ))}
           </ul>
-        </section>
-      </TideReveal>
+        </div>
+      </section>
 
       {/* ═══ DISPONIBILITÉS ═══ */}
-      <section id="disponibilites" className="scroll-mt-20 bg-ecume py-24 md:py-32">
+      <section id="disponibilites" className="scroll-mt-20 bg-ecume py-16 md:py-24">
         <div className="container-x grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <SectionTitle eyebrow="Disponibilités" title="Choisissez votre marée" accent={["marée"]} />
@@ -232,30 +249,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ═══ AVIS (emplacements) ═══ */}
-      <TideReveal className="bg-sable">
-        <section className="container-x py-24 md:py-32" aria-label="Avis des voyageurs">
-          <SectionTitle eyebrow="Avis des voyageurs" title="Ils sont venus, ils ont vu la mer" accent={["mer"]} />
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <FadeUp key={i} delay={i * 0.1}>
-                <figure className="flex h-full flex-col justify-between rounded-sm border border-dashed border-marine/30 bg-ecume/60 p-7">
-                  <div>
-                    <p aria-hidden className="text-phare-2">★★★★★</p>
-                    <blockquote className="mt-4 font-serif text-xl leading-snug text-marine/70">
-                      [À COMPLÉTER] Emplacement réservé à un avis voyageur réel.
-                    </blockquote>
-                  </div>
-                  <figcaption className="mt-6 text-sm text-granite">[Prénom] · [Mois, année du séjour]</figcaption>
-                </figure>
-              </FadeUp>
-            ))}
+      {/* ═══ AVIS : affichés seulement quand de vrais avis sont renseignés (src/config/site.ts → reviews) ═══ */}
+      {siteConfig.reviews.length > 0 && (
+        <section className="bg-sable" aria-label="Avis des voyageurs">
+          <div className="container-x py-16 md:py-20">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <SectionTitle eyebrow="Avis des voyageurs" title="Ils sont venus, ils ont vu la mer" accent={["mer"]} />
+              <p className="font-serif text-2xl">
+                <span className="text-phare-2">★</span> {siteConfig.reviewsSummary}
+              </p>
+            </div>
+            <div className="mt-10 grid gap-4 md:grid-cols-3">
+              {siteConfig.reviews.map((r, i) => (
+                <FadeUp key={i} delay={i * 0.08}>
+                  <figure className="flex h-full flex-col justify-between rounded-lg bg-ecume p-6 shadow-[0_20px_40px_-28px_rgba(14,35,56,0.5)]">
+                    <blockquote className="font-serif text-lg leading-snug">« {r.text} »</blockquote>
+                    <figcaption className="mt-5 text-sm text-granite">
+                      <strong className="text-marine">{r.name}</strong> · {r.date}
+                      {r.source ? ` · ${r.source}` : ""}
+                    </figcaption>
+                  </figure>
+                </FadeUp>
+              ))}
+            </div>
           </div>
         </section>
-      </TideReveal>
+      )}
 
       {/* ═══ QUARTIER ═══ */}
-      <section id="quartier" className="scroll-mt-20 bg-ecume py-24 md:py-32">
+      <section id="quartier" className="scroll-mt-20 border-t border-marine/10 bg-ecume py-16 md:py-24">
         <div className="container-x">
           <div className="mb-12 grid gap-6 md:grid-cols-12 md:items-end">
             <SectionTitle eyebrow="À proximité · Saint-Servan" title="Tout se fait à pied" accent={["pied"]} className="md:col-span-7" />
@@ -273,7 +295,7 @@ export default async function HomePage() {
 
       {/* ═══ CTA FINAL ═══ */}
       <TideReveal className="bg-marine text-ecume">
-        <section className="container-x flex flex-col items-start gap-10 py-24 md:flex-row md:items-end md:justify-between md:py-32">
+        <section className="container-x flex flex-col items-start gap-10 py-16 md:flex-row md:items-end md:justify-between md:py-24">
           <WordReveal text="La prochaine marée haute vous attend" accent={["marée", "haute"]} className="max-w-3xl text-5xl md:text-7xl" />
           <ButtonLink href="/reserver" className="group shrink-0">
             Voir les dates libres <Arrow />
