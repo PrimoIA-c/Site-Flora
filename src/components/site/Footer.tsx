@@ -30,7 +30,10 @@ export function Footer() {
           <p className="eyebrow mb-4 text-phare">Séjourner</p>
           <ul className="space-y-2 text-ecume/80">
             <li><Link className="hover:text-ecume" href="/logement">Le logement</Link></li>
+            <li><Link className="hover:text-ecume" href="/galerie">Galerie</Link></li>
+            <li><Link className="hover:text-ecume" href="/infos-pratiques">Infos pratiques</Link></li>
             <li><Link className="hover:text-ecume" href="/reserver">Réserver</Link></li>
+            <li><Link className="hover:text-ecume" href="/en" hrefLang="en">English version</Link></li>
             <li><Link className="hover:text-ecume" href="/contact">Contact</Link></li>
             <li><Link className="hover:text-ecume" href="/admin" rel="nofollow">Admin</Link></li>
           </ul>

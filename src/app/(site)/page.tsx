@@ -14,11 +14,14 @@ import { EquipmentIcon } from "@/components/site/EquipmentIcon";
 import { formatEUR } from "@/lib/dates";
 import { getAvailabilityData, getSettings, listPublicPhotos } from "@/lib/db";
 import { lowestPrice } from "@/lib/pricing";
+import { getTides } from "@/lib/tides";
+import { HeroTicket, TideLine } from "@/components/site/HeroTicket";
+import { DirectPerks } from "@/components/site/DirectPerks";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [settings, photos, availability] = await Promise.all([getSettings(), listPublicPhotos(), getAvailabilityData()]);
+  const [settings, photos, availability, tides] = await Promise.all([getSettings(), listPublicPhotos(), getAvailabilityData(), getTides()]);
   const fromPrice = lowestPrice(availability);
   const cover = photos.find((p) => p.is_cover) ?? photos[0];
 
@@ -78,6 +81,9 @@ export default async function HomePage() {
             />
             {/* Visible dès le premier affichage (élément LCP) : seul un léger glissement CSS, sans fondu */}
             <p className="rise mt-8 max-w-xl text-lg text-ecume/85 md:text-xl">{settings.hero_subtitle}</p>
+            <div className="lg:hidden">
+              <TideLine tides={tides} />
+            </div>
             <FadeUp immediate delay={1.1} className="mt-10 flex flex-wrap items-center gap-4">
               <ButtonLink href="/reserver" className="group">
                 Réserver mes dates <Arrow />
@@ -89,17 +95,10 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Pastille prix, comme une bouée */}
-        <FadeUp immediate delay={0.9} className="absolute bottom-36 right-5 md:bottom-44 md:right-10">
-          <div className="grid h-28 w-28 place-items-center rounded-full border-[6px] border-dashed border-ecume/70 bg-phare text-center text-marine shadow-2xl md:h-36 md:w-36">
-            <div>
-              <span className="block text-[0.6rem] font-semibold uppercase tracking-widest md:text-[0.7rem]">À partir de</span>
-              <span className="block font-serif text-2xl leading-none md:text-4xl">{formatEUR(fromPrice)}</span>
-              <span className="text-xs md:text-sm">/ nuit</span>
-            </div>
-          </div>
+        {/* Carte marées + prix (ordinateur) */}
+        <FadeUp immediate delay={0.9} className="absolute bottom-40 right-10 hidden lg:block">
+          <HeroTicket price={fromPrice} tides={tides} />
         </FadeUp>
-
       </HeroImmersive>
 
       {/* ═══ BANDEAU MARITIME ═══ */}
@@ -219,6 +218,19 @@ export default async function HomePage() {
               </FadeUp>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ═══ RÉSERVER EN DIRECT ═══ */}
+      <section className="bg-sable-2 py-12 md:py-16" aria-label="Pourquoi réserver en direct">
+        <div className="container-x">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <h2 className="text-3xl md:text-4xl">
+              Réservez <span className="italic" style={{ fontVariationSettings: '"SOFT" 100' }}>en direct</span>
+            </h2>
+            <p className="text-sm text-granite">Sans intermédiaire, de la réservation à la remise des clés.</p>
+          </div>
+          <DirectPerks />
         </div>
       </section>
 

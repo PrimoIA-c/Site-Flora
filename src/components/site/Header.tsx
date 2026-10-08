@@ -7,9 +7,17 @@ import { useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
 import { ButtonLink } from "@/components/motion/Ripple";
 
+const NAV_EN = [
+  { href: "/en#apartment", label: "The apartment" },
+  { href: "/galerie", label: "Photos" },
+  { href: "/en#location", label: "Location" },
+  { href: "/en#faq", label: "FAQ" },
+];
+
 const NAV = [
   { href: "/logement", label: "Le logement" },
   { href: "/galerie", label: "Galerie" },
+  { href: "/infos-pratiques", label: "Infos pratiques" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -17,7 +25,20 @@ export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const overHero = pathname === "/" && !scrolled && !open;
+  const en = pathname.startsWith("/en");
+  const nav = en ? NAV_EN : NAV;
+  const overHero = (pathname === "/" || pathname === "/en") && !scrolled && !open;
+  const LangSwitch = ({ className = "" }: { className?: string }) => (
+    <Link
+      href={en ? "/" : "/en"}
+      hrefLang={en ? "fr" : "en"}
+      lang={en ? "fr" : "en"}
+      className={`inline-flex items-center gap-1 rounded-full border border-current/25 px-2.5 py-1 text-xs font-semibold tracking-wider opacity-80 transition-opacity hover:opacity-100 ${className}`}
+      aria-label={en ? "Version française" : "English version"}
+    >
+      {en ? "FR" : "EN"}
+    </Link>
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -40,21 +61,22 @@ export function Header() {
           <span className="font-serif text-lg tracking-tight md:text-xl">{siteConfig.name}</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Navigation principale">
-          {NAV.map((n) => (
+        <nav className="hidden items-center gap-6 lg:flex xl:gap-8" aria-label="Navigation principale">
+          {nav.map((n) => (
             <Link key={n.href} href={n.href} className="group relative text-sm font-medium">
               {n.label}
               <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[var(--ease-tide)] group-hover:scale-x-100" />
             </Link>
           ))}
+          <LangSwitch />
           <ButtonLink href="/reserver" className="!px-5 !py-2.5">
-            Réserver
+            {en ? "Book" : "Réserver"}
           </ButtonLink>
         </nav>
 
         <button
           type="button"
-          className="relative z-10 flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="relative z-10 flex h-11 w-11 flex-col items-center justify-center gap-1.5 lg:hidden"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -74,10 +96,10 @@ export function Header() {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="border-t border-marine/10 bg-ecume md:hidden"
+            className="border-t border-marine/10 bg-ecume lg:hidden"
           >
             <ul className="container-x flex flex-col py-6">
-              {[...NAV, { href: "/reserver", label: "Réserver" }].map((n) => (
+              {[...nav, { href: "/reserver", label: en ? "Book" : "Réserver" }, { href: en ? "/" : "/en", label: en ? "Version française" : "English version" }].map((n) => (
                 <li key={n.href}>
                   <Link href={n.href} className="block py-3 font-serif text-3xl" onClick={() => setOpen(false)}>
                     {n.label}

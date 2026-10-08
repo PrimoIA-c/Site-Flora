@@ -17,13 +17,28 @@ export interface NearbyPlace {
   note?: string;
 }
 
-export const CATEGORIES: Record<PlaceCategory, { label: string; color: string }> = {
-  plage: { label: "Plages", color: "#2f7fa8" },
-  marche: { label: "Marchés", color: "#d9725a" },
-  commerce: { label: "Commerces", color: "#e7a42d" },
-  table: { label: "Tables", color: "#7a5c99" },
-  patrimoine: { label: "Patrimoine", color: "#0e2338" },
-  transport: { label: "Transports", color: "#6b7178" },
+export const CATEGORIES: Record<PlaceCategory, { label: string; labelEn: string; color: string }> = {
+  plage: { label: "Plages", labelEn: "Beaches", color: "#2f7fa8" },
+  marche: { label: "Marchés", labelEn: "Markets", color: "#d9725a" },
+  commerce: { label: "Commerces", labelEn: "Shops", color: "#e7a42d" },
+  table: { label: "Tables", labelEn: "Food", color: "#7a5c99" },
+  patrimoine: { label: "Patrimoine", labelEn: "Heritage", color: "#0e2338" },
+  transport: { label: "Transports", labelEn: "Transport", color: "#6b7178" },
+};
+
+/** Traductions anglaises des notes et de quelques noms génériques. */
+export const EN_TEXT: Record<string, string> = {
+  "Piscine d'eau de mer à marée basse": "Seawater pool at low tide",
+  "Mardi et vendredi matin": "Tuesday & Friday mornings",
+  "Ouvert 7 j/7": "Open 7 days a week",
+  Pharmacie: "Pharmacy",
+  "Pâtisserie Stéphane Denis": "Stéphane Denis pastry shop",
+  "Boulangerie Mariette": "Mariette bakery",
+  "Port Solidor et ses crêperies": "Port Solidor & its crêperies",
+  "Intra-Muros (Grand' Porte)": "Walled city (Grand' Porte)",
+  "Arrêt de bus Clemenceau": "Clemenceau bus stop",
+  "Gare maritime (ferries)": "Ferry terminal",
+  "Marché de Saint-Servan": "Saint-Servan market",
 };
 
 export const NEARBY_PLACES: NearbyPlace[] = [

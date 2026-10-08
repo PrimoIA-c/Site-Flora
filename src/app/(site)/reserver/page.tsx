@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BookingForm } from "@/components/booking/BookingForm";
+import { DirectPerks } from "@/components/site/DirectPerks";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { isValidISODate } from "@/lib/dates";
@@ -36,7 +37,10 @@ export default async function ReserverPage({ searchParams }: { searchParams: Pro
             Voir le README pour brancher vos clés.
           </p>
         )}
-        <div className="mt-14">
+        <div className="mt-8 max-w-4xl">
+          <DirectPerks compact />
+        </div>
+        <div className="mt-12">
           <BookingForm initial={data} initialRange={{ checkIn, checkOut }} />
         </div>
       </div>

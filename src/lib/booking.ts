@@ -87,7 +87,7 @@ export async function createCheckout(input: CheckoutInput): Promise<CheckoutResu
   try {
     const session = await stripe().checkout.sessions.create({
       mode: "payment",
-      locale: "fr",
+      locale: "auto", // langue du navigateur (français, anglais…)
       customer_email: input.email,
       client_reference_id: booking.id,
       metadata: { booking_id: booking.id },
