@@ -8,7 +8,7 @@ import type { Settings } from "./types";
 export const defaultRooms = [
   {
     name: "Le salon",
-    text: "Pièce de vie sous poutres apparentes : canapé, fauteuil, télévision, table ronde pour quatre et ancienne cheminée en pierre.",
+    text: "Pièce de vie sous poutres apparentes : canapé-lit pour deux couchages supplémentaires, fauteuil, télévision, table ronde pour quatre et ancienne cheminée en pierre.",
   },
   {
     name: "La chambre",
@@ -16,7 +16,7 @@ export const defaultRooms = [
   },
   {
     name: "La cuisine",
-    text: "Cuisine équipée sous fenêtre de toit : plaque de cuisson, four, bouilloire, grille-pain, lave-linge et grand plan de travail.",
+    text: "Cuisine équipée sous fenêtre de toit : plaque de cuisson, four, lave-vaisselle, lave-linge, bouilloire, grille-pain, vaisselle complète (assiettes, verres, couverts) et grand plan de travail.",
   },
   {
     name: "La salle d'eau",
@@ -25,18 +25,16 @@ export const defaultRooms = [
 ];
 
 export const defaultEquipment = [
-  { label: "Wi-Fi fibre", enabled: true },
+  { label: "Wi-Fi", enabled: true },
   { label: "Cuisine équipée", enabled: true },
-  { label: "Lave-vaisselle", enabled: false },
+  { label: "Four", enabled: true },
+  { label: "Lave-vaisselle", enabled: true },
   { label: "Lave-linge", enabled: true },
+  { label: "Vaisselle complète (assiettes, verres, couverts)", enabled: true },
+  { label: "Canapé-lit (2 couchages)", enabled: true },
   { label: "Linge de lit et serviettes", enabled: true },
   { label: "Télévision", enabled: true },
-  { label: "Lit bébé sur demande", enabled: true },
-  { label: "Chaise haute", enabled: true },
-  { label: "Jeux de plage", enabled: true },
-  { label: "Fer à repasser", enabled: true },
-  { label: "Place de parking", enabled: false },
-  { label: "Balcon", enabled: false },
+  { label: "Fer et planche à repasser", enabled: true },
 ];
 
 export const defaultHouseRules = [
@@ -58,9 +56,9 @@ export function defaultSettings(): Settings {
     alert_email: null, // à renseigner dans Admin → Paramètres
     hero_title: "La mer au bout de la rue",
     hero_subtitle:
-      "Un appartement pour quatre à Saint-Malo, à 100 m de la plage et 200 m du marché. Réservez vos dates et payez en ligne.",
+      "Un appartement de caractère pour quatre à Saint-Servan, à 250\u00a0m de la plage des Bas-Sablons et du marché. Réservez vos dates et payez en ligne.",
     description:
-      "Au calme, à deux pas des remparts, un appartement de caractère sous les toits : poutres apparentes, cheminée en pierre, chambre mansardée à l'étage et cuisine équipée baignée de lumière. La plage est à cent mètres — on y descend en maillot, on remonte les pieds pleins de sable.",
+      "Au cœur de Saint-Servan, un appartement de caractère sous les toits : poutres apparentes, cheminée en pierre, chambre mansardée à l'étage et cuisine équipée baignée de lumière. La plage des Bas-Sablons est à quatre minutes à pied, le marché juste à côté, et la tour Solidor au bout de la balade.",
     rooms: defaultRooms,
     equipment: defaultEquipment,
     house_rules: defaultHouseRules,

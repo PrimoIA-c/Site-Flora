@@ -9,8 +9,7 @@ import { ButtonLink } from "@/components/motion/Ripple";
 
 const NAV = [
   { href: "/logement", label: "Le logement" },
-  { href: "/#galerie", label: "Galerie" },
-  { href: "/#quartier", label: "Le quartier" },
+  { href: "/galerie", label: "Galerie" },
   { href: "/contact", label: "Contact" },
 ];
 

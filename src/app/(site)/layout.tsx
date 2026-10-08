@@ -1,5 +1,4 @@
 import { MotionProvider } from "@/components/motion/MotionProvider";
-import { CustomCursor } from "@/components/motion/CustomCursor";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { CookieBanner } from "@/components/site/CookieBanner";
 import { Footer } from "@/components/site/Footer";
@@ -12,7 +11,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         Aller au contenu
       </a>
       <SmoothScroll />
-      <CustomCursor />
       <Header />
       <main id="contenu">{children}</main>
       <Footer />

@@ -1,6 +1,13 @@
 {
+  "framework": "nextjs",
   "crons": [
-    { "path": "/api/ical/sync", "schedule": "0 5 * * *" },
-    { "path": "/api/cron/expire", "schedule": "30 5 * * *" }
+    {
+      "path": "/api/ical/sync",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/expire",
+      "schedule": "30 5 * * *"
+    }
   ]
 }

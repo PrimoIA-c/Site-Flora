@@ -15,18 +15,22 @@ export const siteConfig = {
 
   location: {
     city: "Saint-Malo",
+    district: "Saint-Servan",
     region: "Bretagne",
-    address: "[À COMPLÉTER] rue, 35400 Saint-Malo",
-    // Coordonnées approximatives (Intra-Muros / Grande Plage du Sillon) — à ajuster
-    lat: 48.6493,
-    lng: -2.0257,
+    address: "45 rue Georges Clemenceau, 35400 Saint-Malo",
+    // Coordonnées de l'adresse (Base Adresse Nationale)
+    lat: 48.639738,
+    lng: -2.017929,
+    coordinates: "48°38′23″ N · 2°01′05″ O",
   },
 
+  /** Distances à vol d'oiseau depuis le logement, temps de marche estimés (données OpenStreetMap). */
   nearby: [
-    { label: "Plage", distance: "100 m", minutes: "1 min à pied" },
-    { label: "Marché", distance: "200 m", minutes: "3 min à pied" },
-    { label: "Boulangerie", distance: "150 m", minutes: "2 min à pied" },
-    { label: "Remparts", distance: "800 m", minutes: "10 min à pied" },
+    { label: "Plage des Bas-Sablons", distance: "250 m", minutes: "4 min à pied" },
+    { label: "Marché de Saint-Servan", distance: "230 m", minutes: "4 min à pied" },
+    { label: "Boulangeries", distance: "130 m", minutes: "2 min à pied" },
+    { label: "Tour Solidor", distance: "900 m", minutes: "15 min à pied" },
+    { label: "Intra-Muros", distance: "1,1 km", minutes: "20 min à pied" },
   ],
 
   capacity: { adults: 2, children: 2 },

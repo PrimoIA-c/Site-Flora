@@ -53,7 +53,7 @@ export default async function LogementPage() {
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-sm bg-marine/15 md:grid-cols-4">
             {[
               ["Capacité", `${capacity.adults} adultes + ${capacity.children} enfants`],
-              ["Chambre", "1 chambre (lit double)"],
+              ["Couchages", "1 lit double + 1 canapé-lit"],
               ["Arrivée / départ", `${defaults.checkInTime} / ${defaults.checkOutTime}`],
               ["Tarif", `dès ${formatEUR(lowestPrice(availability))} / nuit`],
             ].map(([k, v]) => (

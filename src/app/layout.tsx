@@ -5,9 +5,9 @@ import { siteUrl } from "@/lib/stripe";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: { default: `${siteConfig.name} — Location à Saint-Malo, à 100 m de la plage`, template: `%s · ${siteConfig.name}` },
+  title: { default: `${siteConfig.name} — Appartement de caractère à Saint-Malo, près de la plage`, template: `%s · ${siteConfig.name}` },
   description:
-    "Appartement pour 4 personnes à Saint-Malo, à 100 m de la plage et 200 m du marché. Disponibilités en temps réel et réservation en ligne sécurisée, à partir de 90 € la nuit.",
+    "Appartement de caractère pour 4 personnes à Saint-Servan, Saint-Malo, à 250 m de la plage des Bas-Sablons et du marché. Disponibilités en temps réel et réservation en ligne sécurisée, à partir de 90 € la nuit.",
   openGraph: { type: "website", locale: siteConfig.locale, siteName: siteConfig.name },
   icons: { icon: "/icon.svg" },
 };
