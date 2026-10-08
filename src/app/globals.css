@@ -279,7 +279,7 @@ html.lenis body {
 
 /* Carte Leaflet aux couleurs du site */
 .map-sea .leaflet-tile-pane {
-  filter: saturate(0.55) sepia(0.18) hue-rotate(-8deg) brightness(1.02) contrast(0.96);
+  filter: saturate(0.45) sepia(0.22) hue-rotate(-6deg) brightness(1.03) contrast(0.92);
 }
 .map-sea .leaflet-container {
   background: var(--color-sable-2);

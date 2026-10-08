@@ -40,7 +40,7 @@ export default function Confidentialite() {
         <li>Supabase (base de données) — région <T>Europe</T>.</li>
         <li>Resend (envoi des e-mails) — États-Unis.</li>
         <li>Vercel (hébergement du site) — États-Unis.</li>
-        <li>CARTO (fonds de la carte du quartier, données OpenStreetMap) — l&apos;affichage de la carte transmet votre adresse IP à ce service, sans cookie.</li>
+        <li>OpenStreetMap Foundation (fonds de la carte du quartier), Royaume-Uni — l&apos;affichage de la carte transmet votre adresse IP à ce service, sans cookie.</li>
       </ul>
       <p>
         Les transferts hors de l&apos;Union européenne sont encadrés par les clauses contractuelles types de la Commission européenne et/ou le cadre
