@@ -21,7 +21,7 @@ export function MobileBookBar({ price }: { price: number }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (pathname.startsWith("/reserver") || pathname.startsWith("/admin") || pathname.startsWith("/reservation")) return null;
+  if (pathname.startsWith("/reserver") || pathname.startsWith("/en/book") || pathname.startsWith("/en/booking") || pathname.startsWith("/admin") || pathname.startsWith("/reservation")) return null;
 
   return (
     <div
@@ -39,7 +39,7 @@ export function MobileBookBar({ price }: { price: number }) {
           <p className="text-[0.7rem] text-phare-2">{en ? "Direct booking · no service fees" : "En direct · sans frais de service"}</p>
         </div>
         <Link
-          href="/reserver"
+          href={en ? "/en/book" : "/reserver"}
           tabIndex={show ? 0 : -1}
           className="shrink-0 rounded-full bg-phare px-6 py-3.5 text-sm font-semibold text-marine shadow-lg active:scale-95"
         >

@@ -55,7 +55,9 @@ const shortFmt = new Intl.DateTimeFormat("fr-FR", {
   timeZone: "UTC",
 });
 
-export const formatLong = (s: string) => longFmt.format(parseISO(s));
+const longFmtEn = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+
+export const formatLong = (s: string, lang: "fr" | "en" = "fr") => (lang === "en" ? longFmtEn : longFmt).format(parseISO(s));
 export const formatShort = (s: string) => shortFmt.format(parseISO(s));
 
 export const formatEUR = (n: number) =>

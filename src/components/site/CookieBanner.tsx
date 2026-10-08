@@ -2,6 +2,8 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { t } from "@/lib/i18n";
+import { useLang } from "@/lib/use-lang";
 import { useEffect, useState } from "react";
 
 /**
@@ -29,6 +31,7 @@ export function getConsent(): Consent | null {
 }
 
 export function CookieBanner() {
+  const lang = useLang();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -54,27 +57,30 @@ export function CookieBanner() {
         <motion.div
           role="dialog"
           aria-live="polite"
-          aria-label="Gestion des cookies"
+          aria-label={t(lang, "Gestion des cookies", "Cookie settings")}
           initial={{ y: "120%" }}
           animate={{ y: 0 }}
           exit={{ y: "120%" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-x-3 bottom-3 z-[60] mx-auto max-w-md rounded-lg bg-marine p-5 text-ecume shadow-2xl ring-1 ring-ecume/10 md:inset-x-auto md:bottom-6 md:right-6 md:p-6"
         >
-          <p className="font-serif text-xl">Un petit mot sur les cookies</p>
+          <p className="font-serif text-xl">{t(lang, "Un petit mot sur les cookies", "A quick word about cookies")}</p>
           <p className="mt-2 text-sm leading-relaxed text-ecume/75">
-            Ce site n&apos;utilise que les cookies indispensables à son fonctionnement et au paiement sécurisé. Avec votre accord,
-            nous pourrions mesurer l&apos;audience de façon anonyme.{" "}
+            {t(
+              lang,
+              "Ce site n'utilise que les cookies indispensables à son fonctionnement et au paiement sécurisé. Avec votre accord, nous pourrions mesurer l'audience de façon anonyme.",
+              "This site only uses the cookies it needs to work and for secure payment. With your consent, we may measure visits anonymously.",
+            )}{" "}
             <Link href="/cookies" className="underline underline-offset-2">
-              En savoir plus
+              {t(lang, "En savoir plus", "Learn more")}
             </Link>
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <button onClick={() => choose("refused")} className="rounded-full border border-ecume/40 px-5 py-2.5 text-sm font-semibold hover:bg-ecume/10">
-              Refuser
+              {t(lang, "Refuser", "Decline")}
             </button>
             <button onClick={() => choose("accepted")} className="rounded-full bg-phare px-5 py-2.5 text-sm font-semibold text-marine hover:bg-phare-2">
-              Accepter
+              {t(lang, "Accepter", "Accept")}
             </button>
           </div>
         </motion.div>
@@ -84,9 +90,10 @@ export function CookieBanner() {
 }
 
 export function CookieSettingsLink() {
+  const lang = useLang();
   return (
     <button type="button" className="text-left hover:text-ecume" onClick={() => window.dispatchEvent(new Event(EVENT))}>
-      Gérer mes cookies
+      {t(lang, "Gérer mes cookies", "Cookie settings")}
     </button>
   );
 }

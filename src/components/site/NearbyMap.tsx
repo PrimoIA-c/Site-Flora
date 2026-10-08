@@ -67,7 +67,7 @@ export function NearbyMap({ lang = "fr" }: { lang?: "fr" | "en" }) {
       // Fond OpenStreetMap (gratuit, sans clé), teinté aux couleurs du site par CSS (.map-sea)
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">les contributeurs OpenStreetMap</a>',
+        attribution: en ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>' : '&copy; <a href="https://www.openstreetmap.org/copyright">les contributeurs OpenStreetMap</a>',
       }).addTo(map);
       L.marker([lat, lng], { icon: homeIcon(L), zIndexOffset: 1000, title: "Le logement" })
         .addTo(map)

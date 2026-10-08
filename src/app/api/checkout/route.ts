@@ -41,6 +41,7 @@ export async function POST(req: Request) {
     email,
     phone,
     message,
+    lang: body.lang === "en" ? "en" : "fr",
   });
 
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: 409 });

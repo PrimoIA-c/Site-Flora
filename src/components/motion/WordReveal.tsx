@@ -28,7 +28,7 @@ export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immedia
         <span aria-hidden>
           {words.map((w, i) => (
             <Fragment key={i}>
-              <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom">
+              <span className="inline-block overflow-hidden px-[0.1em] -mx-[0.1em] pb-[0.24em] -mb-[0.24em] align-bottom">
                 <span
                   className={`word-rise inline-block ${isAccent(w) ? "italic" : ""}`}
                   style={{ ...(isAccent(w) ? accentStyle : {}), animationDelay: `${delay + i * 0.07}s` }}
@@ -56,7 +56,7 @@ export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immedia
       >
         {words.map((w, i) => (
           <Fragment key={i}>
-            <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom">
+            <span className="inline-block overflow-hidden px-[0.1em] -mx-[0.1em] pb-[0.24em] -mb-[0.24em] align-bottom">
               <motion.span
                 className={`inline-block ${isAccent(w) ? "italic" : ""}`}
                 style={isAccent(w) ? accentStyle : undefined}

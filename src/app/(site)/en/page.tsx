@@ -90,7 +90,7 @@ export default async function EnglishPage() {
               <TideLine tides={tides} lang="en" />
             </div>
             <FadeUp immediate delay={1.1} className="mt-10 flex flex-wrap items-center gap-4">
-              <ButtonLink href="/reserver" className="group">
+              <ButtonLink href="/en/book" className="group">
                 Check availability <Arrow />
               </ButtonLink>
               <Link href="#visit" className="group inline-flex items-center gap-2 rounded-full border border-ecume/30 px-5 py-3 text-sm font-semibold text-ecume backdrop-blur-sm transition-colors hover:bg-ecume hover:text-marine">
@@ -141,7 +141,7 @@ export default async function EnglishPage() {
                 </li>
               ))}
             </ul>
-            <Link href="/galerie" className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold">
+            <Link href="/en/gallery" className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold">
               See all photos <Arrow />
             </Link>
           </div>
@@ -188,9 +188,9 @@ export default async function EnglishPage() {
         <div className="container-x flex flex-col items-start gap-8 py-16 md:flex-row md:items-center md:justify-between md:py-20">
           <div>
             <p className="max-w-2xl font-serif text-4xl md:text-6xl">The next high tide is waiting for you</p>
-            <p className="mt-3 text-sm text-ecume/70">The booking page is in French — payment is handled securely by Stripe in your language.</p>
+            <p className="mt-3 text-sm text-ecume/70">Direct booking, no service fees, secure payment by Stripe.</p>
           </div>
-          <ButtonLink href="/reserver" className="group shrink-0">
+          <ButtonLink href="/en/book" className="group shrink-0">
             Check availability <Arrow />
           </ButtonLink>
         </div>

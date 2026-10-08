@@ -9,10 +9,21 @@ import { ButtonLink } from "@/components/motion/Ripple";
 
 const NAV_EN = [
   { href: "/en#apartment", label: "The apartment" },
-  { href: "/galerie", label: "Photos" },
-  { href: "/en#location", label: "Location" },
-  { href: "/en#faq", label: "FAQ" },
+  { href: "/en/gallery", label: "Photos" },
+  { href: "/en#faq", label: "Practical info" },
+  { href: "/en/contact", label: "Contact" },
 ];
+
+/** Page équivalente dans l'autre langue. */
+const SWITCH: Record<string, string> = {
+  "/": "/en",
+  "/galerie": "/en/gallery",
+  "/reserver": "/en/book",
+  "/contact": "/en/contact",
+  "/infos-pratiques": "/en#faq",
+  "/logement": "/en#apartment",
+};
+const SWITCH_BACK: Record<string, string> = { "/en": "/", "/en/gallery": "/galerie", "/en/book": "/reserver", "/en/contact": "/contact" };
 
 const NAV = [
   { href: "/logement", label: "Le logement" },
@@ -30,7 +41,7 @@ export function Header() {
   const overHero = (pathname === "/" || pathname === "/en") && !scrolled && !open;
   const LangSwitch = ({ className = "" }: { className?: string }) => (
     <Link
-      href={en ? "/" : "/en"}
+      href={en ? (SWITCH_BACK[pathname] ?? "/") : (SWITCH[pathname] ?? "/en")}
       hrefLang={en ? "fr" : "en"}
       lang={en ? "fr" : "en"}
       className={`inline-flex items-center gap-1 rounded-full border border-current/25 px-2.5 py-1 text-xs font-semibold tracking-wider opacity-80 transition-opacity hover:opacity-100 ${className}`}
@@ -56,7 +67,7 @@ export function Header() {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between md:h-20">
-        <Link href="/" className="group flex items-center gap-3" aria-label={`${siteConfig.name} — accueil`}>
+        <Link href={en ? "/en" : "/"} className="group flex items-center gap-3" aria-label={`${siteConfig.name} — ${en ? "home" : "accueil"}`}>
           <LighthouseMark />
           <span className="font-serif text-lg tracking-tight md:text-xl">{siteConfig.name}</span>
         </Link>
@@ -69,7 +80,7 @@ export function Header() {
             </Link>
           ))}
           <LangSwitch />
-          <ButtonLink href="/reserver" className="!px-5 !py-2.5">
+          <ButtonLink href={en ? "/en/book" : "/reserver"} className="!px-5 !py-2.5">
             {en ? "Book" : "Réserver"}
           </ButtonLink>
         </nav>
@@ -80,7 +91,7 @@ export function Header() {
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={open ? (en ? "Close menu" : "Fermer le menu") : en ? "Open menu" : "Ouvrir le menu"}
         >
           <span className={`h-px w-6 bg-current transition-transform duration-300 ${open ? "translate-y-[3.5px] rotate-45" : ""}`} />
           <span className={`h-px w-6 bg-current transition-transform duration-300 ${open ? "-translate-y-[3.5px] -rotate-45" : ""}`} />
@@ -99,7 +110,7 @@ export function Header() {
             className="border-t border-marine/10 bg-ecume lg:hidden"
           >
             <ul className="container-x flex flex-col py-6">
-              {[...nav, { href: "/reserver", label: en ? "Book" : "Réserver" }, { href: en ? "/" : "/en", label: en ? "Version française" : "English version" }].map((n) => (
+              {[...nav, { href: en ? "/en/book" : "/reserver", label: en ? "Book" : "Réserver" }, { href: en ? (SWITCH_BACK[pathname] ?? "/") : (SWITCH[pathname] ?? "/en"), label: en ? "Version française" : "English version" }].map((n) => (
                 <li key={n.href}>
                   <Link href={n.href} className="block py-3 font-serif text-3xl" onClick={() => setOpen(false)}>
                     {n.label}

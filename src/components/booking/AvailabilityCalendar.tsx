@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import { addDays, parseISO, toISO, todayParis } from "@/lib/dates";
 import { spawnRipple } from "@/components/motion/Ripple";
+import { t } from "@/lib/i18n";
+import { useLang } from "@/lib/use-lang";
 
 export interface Range {
   checkIn: string | null;
@@ -20,9 +22,17 @@ interface Props {
   priceFor?: (date: string) => number;
 }
 
-const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
-const monthFmt = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" });
-const dayFmt = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+const WEEKDAYS = { fr: ["L", "M", "M", "J", "V", "S", "D"], en: ["M", "T", "W", "T", "F", "S", "S"] };
+const FMT = {
+  fr: {
+    month: new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" }),
+    day: new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }),
+  },
+  en: {
+    month: new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }),
+    day: new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }),
+  },
+};
 
 function monthStart(iso: string) {
   return `${iso.slice(0, 7)}-01`;
@@ -42,6 +52,9 @@ export function AvailabilityCalendar({
   minNightsFor,
   priceFor,
 }: Props) {
+  const lang = useLang();
+  const monthFmt = FMT[lang].month;
+  const dayFmt = FMT[lang].day;
   const today = todayParis();
   const firstMonth = monthStart(today);
   const [cursor, setCursor] = useState(value.checkIn ? monthStart(value.checkIn) : firstMonth);
@@ -71,7 +84,7 @@ export function AvailabilityCalendar({
         else if (limit && d > limit) disabled = true;
         else if (d < addDays(checkIn, minN)) {
           disabled = true;
-          reason = `minimum ${minN} nuits`;
+          reason = lang === "en" ? `${minN}-night minimum` : `minimum ${minN} nuits`;
         }
       } else {
         disabled = past || nightTaken;
@@ -105,25 +118,25 @@ export function AvailabilityCalendar({
           onClick={() => setCursor(addMonths(cursor, -1))}
           disabled={cursor <= firstMonth}
           className="grid h-10 w-10 place-items-center rounded-full border border-marine/15 transition hover:bg-marine hover:text-ecume disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-marine"
-          aria-label="Mois précédent"
+          aria-label={t(lang, "Mois précédent", "Previous month")}
         >
           ←
         </button>
         <p className="text-sm text-granite" aria-live="polite">
           {selectable
             ? !checkIn
-              ? "Choisissez votre date d'arrivée"
+              ? t(lang, "Choisissez votre date d'arrivée", "Choose your arrival date")
               : !checkOut
-                ? "Choisissez votre date de départ"
-                : "Séjour sélectionné — cliquez pour recommencer"
-            : "Disponibilités en temps réel"}
+                ? t(lang, "Choisissez votre date de départ", "Choose your departure date")
+                : t(lang, "Séjour sélectionné — cliquez pour recommencer", "Stay selected — click to start again")
+            : t(lang, "Disponibilités en temps réel", "Live availability")}
         </p>
         <button
           type="button"
           onClick={() => setCursor(addMonths(cursor, 1))}
           disabled={cursor >= maxMonth}
           className="grid h-10 w-10 place-items-center rounded-full border border-marine/15 transition hover:bg-marine hover:text-ecume disabled:opacity-25"
-          aria-label="Mois suivant"
+          aria-label={t(lang, "Mois suivant", "Next month")}
         >
           →
         </button>
@@ -134,7 +147,7 @@ export function AvailabilityCalendar({
           <div key={m} className={idx > 0 ? "hidden md:block" : ""}>
             <h3 className="mb-3 font-serif text-xl capitalize">{monthFmt.format(parseISO(m))}</h3>
             <div className="grid grid-cols-7 text-center text-[0.7rem] font-semibold uppercase tracking-widest text-granite">
-              {WEEKDAYS.map((w, i) => (
+              {WEEKDAYS[lang].map((w, i) => (
                 <div key={i} className="pb-2">
                   {w}
                 </div>
@@ -162,7 +175,7 @@ export function AvailabilityCalendar({
                     }}
                     onMouseEnter={() => setHover(d)}
                     onMouseLeave={() => setHover(null)}
-                    aria-label={`${dayFmt.format(parseISO(d))}${s.nightTaken ? ", indisponible" : ", disponible"}${s.reason ? `, ${s.reason}` : ""}`}
+                    aria-label={`${dayFmt.format(parseISO(d))}${s.nightTaken ? t(lang, ", indisponible", ", unavailable") : t(lang, ", disponible", ", available")}${s.reason ? `, ${s.reason}` : ""}`}
                     aria-pressed={isStart || isEnd}
                     className={[
                       "ripple-host relative flex aspect-square flex-col items-center justify-center text-sm transition-colors duration-200",
@@ -208,18 +221,18 @@ export function AvailabilityCalendar({
 
       <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-xs text-granite">
         <span className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full border border-marine/30 bg-white" /> Disponible
+          <span className="h-3 w-3 rounded-full border border-marine/30 bg-white" /> {t(lang, "Disponible", "Available")}
         </span>
         <span className="flex items-center gap-2">
           <span
             className="h-3 w-3 rounded-sm"
             style={{ background: "repeating-linear-gradient(135deg, var(--color-granite-2) 0 1px, transparent 1px 3px)" }}
           />{" "}
-          Réservé / indisponible
+          {t(lang, "Réservé / indisponible", "Booked / unavailable")}
         </span>
         {selectable && (
           <span className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-marine" /> Votre séjour
+            <span className="h-3 w-3 rounded-full bg-marine" /> {t(lang, "Votre séjour", "Your stay")}
           </span>
         )}
       </div>

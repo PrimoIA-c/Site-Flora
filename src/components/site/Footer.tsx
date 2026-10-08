@@ -1,9 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { LighthouseMark } from "./Header";
 import { CookieSettingsLink } from "./CookieBanner";
+import { t } from "@/lib/i18n";
+import { useLang } from "@/lib/use-lang";
 
 export function Footer() {
+  const lang = useLang();
+  const en = lang === "en";
   const year = new Date().getFullYear();
   return (
     <footer className="relative bg-marine text-ecume">
@@ -18,34 +24,34 @@ export function Footer() {
             <LighthouseMark className="h-9 w-9" />
             <span className="font-serif text-2xl">{siteConfig.name}</span>
           </div>
-          <p className="mt-4 max-w-sm text-ecume/70">{siteConfig.tagline}.</p>
+          <p className="mt-4 max-w-sm text-ecume/70">{en ? "A characterful apartment in Saint-Servan, four minutes from the beach" : siteConfig.tagline}.</p>
           <p className="mt-6 text-sm text-ecume/60">
-            Meublé de tourisme — n° d&apos;enregistrement : <span className="text-ecume">{siteConfig.registrationNumber}</span>
+            {t(lang, "Meublé de tourisme — n° d'enregistrement", "Holiday rental — registration no.")} : <span className="text-ecume">{siteConfig.registrationNumber}</span>
             <br />
-            Taxe de séjour collectée pour le compte de la Ville de Saint-Malo.
+            {t(lang, "Taxe de séjour collectée pour le compte de la Ville de Saint-Malo.", "Tourist tax collected on behalf of the City of Saint-Malo.")}
           </p>
         </div>
 
-        <nav className="md:col-span-3" aria-label="Pages du site">
-          <p className="eyebrow mb-4 text-phare">Séjourner</p>
+        <nav className="md:col-span-3" aria-label={t(lang, "Pages du site", "Site pages")}>
+          <p className="eyebrow mb-4 text-phare">{t(lang, "Séjourner", "Your stay")}</p>
           <ul className="space-y-2 text-ecume/80">
-            <li><Link className="hover:text-ecume" href="/logement">Le logement</Link></li>
-            <li><Link className="hover:text-ecume" href="/galerie">Galerie</Link></li>
-            <li><Link className="hover:text-ecume" href="/infos-pratiques">Infos pratiques</Link></li>
-            <li><Link className="hover:text-ecume" href="/reserver">Réserver</Link></li>
-            <li><Link className="hover:text-ecume" href="/en" hrefLang="en">English version</Link></li>
-            <li><Link className="hover:text-ecume" href="/contact">Contact</Link></li>
+            <li><Link className="hover:text-ecume" href={en ? "/en#apartment" : "/logement"}>{t(lang, "Le logement", "The apartment")}</Link></li>
+            <li><Link className="hover:text-ecume" href={en ? "/en/gallery" : "/galerie"}>{t(lang, "Galerie", "Photos")}</Link></li>
+            <li><Link className="hover:text-ecume" href={en ? "/en#faq" : "/infos-pratiques"}>{t(lang, "Infos pratiques", "Practical info")}</Link></li>
+            <li><Link className="hover:text-ecume" href={en ? "/en/book" : "/reserver"}>{t(lang, "Réserver", "Book")}</Link></li>
+            <li><Link className="hover:text-ecume" href={en ? "/en/contact" : "/contact"}>Contact</Link></li>
+            <li><Link className="hover:text-ecume" href={en ? "/" : "/en"} hrefLang={en ? "fr" : "en"}>{en ? "Version française" : "English version"}</Link></li>
             <li><Link className="hover:text-ecume" href="/admin" rel="nofollow">Admin</Link></li>
           </ul>
         </nav>
 
-        <nav className="md:col-span-4" aria-label="Informations légales">
-          <p className="eyebrow mb-4 text-phare">Informations</p>
+        <nav className="md:col-span-4" aria-label={t(lang, "Informations légales", "Legal information")}>
+          <p className="eyebrow mb-4 text-phare">{t(lang, "Informations", "Legal (in French)")}</p>
           <ul className="space-y-2 text-ecume/80">
-            <li><Link className="hover:text-ecume" href="/mentions-legales">Mentions légales</Link></li>
-            <li><Link className="hover:text-ecume" href="/conditions-generales">Conditions générales de location</Link></li>
-            <li><Link className="hover:text-ecume" href="/confidentialite">Politique de confidentialité</Link></li>
-            <li><Link className="hover:text-ecume" href="/cookies">Politique de cookies</Link></li>
+            <li><Link className="hover:text-ecume" href="/mentions-legales">{t(lang, "Mentions légales", "Legal notice")}</Link></li>
+            <li><Link className="hover:text-ecume" href="/conditions-generales">{t(lang, "Conditions générales de location", "Rental terms")}</Link></li>
+            <li><Link className="hover:text-ecume" href="/confidentialite">{t(lang, "Politique de confidentialité", "Privacy policy")}</Link></li>
+            <li><Link className="hover:text-ecume" href="/cookies">{t(lang, "Politique de cookies", "Cookie policy")}</Link></li>
             <li><CookieSettingsLink /></li>
           </ul>
         </nav>
@@ -53,7 +59,7 @@ export function Footer() {
 
       <div className="container-x flex flex-col gap-2 border-t border-ecume/10 py-6 text-xs text-ecume/50 md:flex-row md:justify-between">
         <span>© {year} {siteConfig.name} · {siteConfig.location.city}</span>
-        <span>Paiement sécurisé par Stripe</span>
+        <span>{t(lang, "Paiement sécurisé par Stripe", "Secure payment by Stripe")}</span>
       </div>
     </footer>
   );

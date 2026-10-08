@@ -35,6 +35,8 @@ export interface CheckoutInput extends QuoteInput {
   email: string;
   phone: string;
   message?: string;
+  /** Langue du parcours (pages de retour, e-mails au client). */
+  lang?: "fr" | "en";
 }
 
 export type CheckoutResult = { ok: true; url: string } | { ok: false; error: string };
@@ -74,6 +76,7 @@ export async function createCheckout(input: CheckoutInput): Promise<CheckoutResu
   if (!created.ok) return { ok: false, error: "Ces dates viennent d'être réservées. Choisissez d'autres dates." };
   const booking = created.booking;
 
+  const en = input.lang === "en";
   const label = `${formatShort(input.checkIn)} → ${formatShort(input.checkOut)}`;
   const line = (name: string, amount: number, description?: string): Stripe.Checkout.SessionCreateParams.LineItem => ({
     quantity: 1,
@@ -90,17 +93,23 @@ export async function createCheckout(input: CheckoutInput): Promise<CheckoutResu
       locale: "auto", // langue du navigateur (français, anglais…)
       customer_email: input.email,
       client_reference_id: booking.id,
-      metadata: { booking_id: booking.id },
+      metadata: { booking_id: booking.id, lang: en ? "en" : "fr" },
       payment_intent_data: { metadata: { booking_id: booking.id }, description: `${siteConfig.name} — ${label}` },
       // Stripe impose au moins 30 minutes : la session expire en même temps que la réservation en attente.
       expires_at: Math.floor((Date.now() + Math.max(pendingHoldMs, 30 * 60_000)) / 1000),
       line_items: [
-        line(`Séjour ${siteConfig.name}`, q.accommodation, `${label} · ${q.nights} nuit${q.nights > 1 ? "s" : ""}`),
-        ...(q.cleaning > 0 ? [line("Ménage de fin de séjour", q.cleaning)] : []),
-        ...(q.touristTax > 0 ? [line("Taxe de séjour", q.touristTax, `${input.adults} adulte(s) × ${q.nights} nuit(s)`)] : []),
+        line(
+          en ? `Stay at ${siteConfig.name}` : `Séjour ${siteConfig.name}`,
+          q.accommodation,
+          `${label} · ${q.nights} ${en ? "night" : "nuit"}${q.nights > 1 ? "s" : ""}`,
+        ),
+        ...(q.cleaning > 0 ? [line(en ? "End-of-stay cleaning" : "Ménage de fin de séjour", q.cleaning)] : []),
+        ...(q.touristTax > 0
+          ? [line(en ? "Tourist tax" : "Taxe de séjour", q.touristTax, en ? `${input.adults} adult(s) × ${q.nights} night(s)` : `${input.adults} adulte(s) × ${q.nights} nuit(s)`)]
+          : []),
       ],
-      success_url: `${siteUrl()}/reservation/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl()}/reservation/annulee?booking=${booking.id}`,
+      success_url: `${siteUrl()}${en ? "/en/booking/confirmed" : "/reservation/confirmation"}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl()}${en ? "/en/booking/cancelled" : "/reservation/annulee"}?booking=${booking.id}`,
     });
     await updateBooking(booking.id, { stripe_session_id: session.id });
     return { ok: true, url: session.url! };
@@ -121,6 +130,7 @@ export async function createCheckout(input: CheckoutInput): Promise<CheckoutResu
  */
 export async function finalizeFromSession(session: Stripe.Checkout.Session): Promise<Booking | null> {
   const bookingId = session.metadata?.booking_id;
+  const guestLang = session.metadata?.lang === "en" ? "en" : "fr";
   const booking = (bookingId && (await getBooking(bookingId))) || (await getBookingBySession(session.id));
   if (!booking) {
     console.error("[finalize] réservation introuvable pour la session", session.id);
@@ -151,7 +161,7 @@ export async function finalizeFromSession(session: Stripe.Checkout.Session): Pro
   }
 
   if (paid) {
-    await Promise.all([sendGuestConfirmation(paid), sendOwnerAlert(paid, settings.alert_email)]);
+    await Promise.all([sendGuestConfirmation(paid, guestLang), sendOwnerAlert(paid, settings.alert_email)]);
     return paid;
   }
 
@@ -175,7 +185,7 @@ export async function finalizeFromSession(session: Stripe.Checkout.Session): Pro
       stripe_payment_intent: paymentIntent,
     })) ?? booking;
   await Promise.all([
-    sendGuestRefund(cancelled),
+    sendGuestRefund(cancelled, guestLang),
     sendOwnerProblem(cancelled, settings.alert_email, "Dates prises pendant le paiement"),
   ]);
   return cancelled;

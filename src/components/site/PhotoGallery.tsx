@@ -3,6 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/lib/i18n";
+import { useLang } from "@/lib/use-lang";
 
 export interface GalleryPhoto {
   url: string;
@@ -17,15 +19,17 @@ const roomOf = (label: string) => label.split(",")[0].trim() || "Le logement";
  * (flèches, clavier, glisser du doigt, vignettes).
  */
 export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
+  const lang = useLang();
+  const ALL = t(lang, "Tout", "All");
   const rooms = useMemo(() => Array.from(new Set(photos.map((p) => roomOf(p.label)))), [photos]);
-  const [room, setRoom] = useState<string>("Tout");
-  const shown = useMemo(() => (room === "Tout" ? photos : photos.filter((p) => roomOf(p.label) === room)), [photos, room]);
+  const [room, setRoom] = useState<string>(ALL);
+  const shown = useMemo(() => (room === ALL ? photos : photos.filter((p) => roomOf(p.label) === room)), [photos, room, ALL]);
   const [open, setOpen] = useState<number | null>(null);
 
   return (
     <>
-      <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filtrer par pièce">
-        {["Tout", ...rooms].map((r) => (
+      <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label={t(lang, "Filtrer par pièce", "Filter by room")}>
+        {[ALL, ...rooms].map((r) => (
           <button
             key={r}
             type="button"
@@ -36,7 +40,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
             }`}
           >
             {r}
-            <span className="ml-2 text-xs opacity-60">{r === "Tout" ? photos.length : photos.filter((p) => roomOf(p.label) === r).length}</span>
+            <span className="ml-2 text-xs opacity-60">{r === ALL ? photos.length : photos.filter((p) => roomOf(p.label) === r).length}</span>
           </button>
         ))}
       </div>
@@ -57,7 +61,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
                 type="button"
                 onClick={() => setOpen(i)}
                 className="group relative block w-full overflow-hidden rounded-sm bg-sable shadow-[0_24px_50px_-28px_rgba(14,35,56,0.55)]"
-                aria-label={`Agrandir : ${p.label}`}
+                aria-label={`${t(lang, "Agrandir", "Enlarge")} : ${p.label}`}
               >
                 <div className={`relative w-full ${i % 3 === 1 ? "aspect-[4/5]" : "aspect-[3/4]"}`}>
                   <Image
@@ -81,12 +85,12 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
         </AnimatePresence>
       </motion.ul>
 
-      <AnimatePresence>{open !== null && <Lightbox photos={shown} start={open} onClose={() => setOpen(null)} />}</AnimatePresence>
+      <AnimatePresence>{open !== null && <Lightbox photos={shown} start={open} onClose={() => setOpen(null)} lang={lang} />}</AnimatePresence>
     </>
   );
 }
 
-function Lightbox({ photos, start, onClose }: { photos: GalleryPhoto[]; start: number; onClose: () => void }) {
+function Lightbox({ photos, start, onClose, lang }: { photos: GalleryPhoto[]; start: number; onClose: () => void; lang: "fr" | "en" }) {
   const [i, setI] = useState(start);
   const [dir, setDir] = useState(0);
   const n = photos.length;
@@ -117,7 +121,7 @@ function Lightbox({ photos, start, onClose }: { photos: GalleryPhoto[]; start: n
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={`Photo ${i + 1} sur ${n} : ${p.label}`}
+      aria-label={`Photo ${i + 1} ${t(lang, "sur", "of")} ${n} : ${p.label}`}
       className="fixed inset-0 z-[80] flex flex-col bg-marine/97 text-ecume backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -130,7 +134,7 @@ function Lightbox({ photos, start, onClose }: { photos: GalleryPhoto[]; start: n
           <span className="text-ecume/60"> / {String(n).padStart(2, "0")}</span>
           <span className="ml-4 hidden text-ecume/85 sm:inline">{p.label}</span>
         </p>
-        <button ref={closeRef} type="button" onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full border border-ecume/30 text-xl hover:bg-ecume hover:text-marine" aria-label="Fermer">
+        <button ref={closeRef} type="button" onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full border border-ecume/30 text-xl hover:bg-ecume hover:text-marine" aria-label={t(lang, "Fermer", "Close")}>
           ✕
         </button>
       </div>
@@ -156,29 +160,29 @@ function Lightbox({ photos, start, onClose }: { photos: GalleryPhoto[]; start: n
             <Image src={p.url} alt={p.label} fill sizes="100vw" className="pointer-events-none select-none object-contain" priority />
           </motion.div>
         </AnimatePresence>
-        <button type="button" onClick={() => go(-1)} aria-label="Photo précédente" className="absolute left-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-ecume/30 bg-marine/40 text-2xl hover:bg-ecume hover:text-marine md:grid">
+        <button type="button" onClick={() => go(-1)} aria-label={t(lang, "Photo précédente", "Previous photo")} className="absolute left-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-ecume/30 bg-marine/40 text-2xl hover:bg-ecume hover:text-marine md:grid">
           ‹
         </button>
-        <button type="button" onClick={() => go(1)} aria-label="Photo suivante" className="absolute right-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-ecume/30 bg-marine/40 text-2xl hover:bg-ecume hover:text-marine md:grid">
+        <button type="button" onClick={() => go(1)} aria-label={t(lang, "Photo suivante", "Next photo")} className="absolute right-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-ecume/30 bg-marine/40 text-2xl hover:bg-ecume hover:text-marine md:grid">
           ›
         </button>
       </div>
 
       <p className="px-5 pt-3 text-center font-serif text-lg sm:hidden">{p.label}</p>
       <ul className="flex gap-2 overflow-x-auto px-5 py-4 [scrollbar-width:none] md:justify-center">
-        {photos.map((t, k) => (
-          <li key={t.url} className="shrink-0">
+        {photos.map((th, k) => (
+          <li key={th.url} className="shrink-0">
             <button
               type="button"
               onClick={() => {
                 setDir(k > i ? 1 : -1);
                 setI(k);
               }}
-              aria-label={`Voir : ${t.label}`}
+              aria-label={`${t(lang, "Voir", "View")} : ${th.label}`}
               aria-current={k === i}
               className={`relative block h-14 w-11 overflow-hidden rounded-sm transition-all md:h-16 md:w-12 ${k === i ? "ring-2 ring-phare" : "opacity-50 hover:opacity-100"}`}
             >
-              <Image src={t.url} alt="" fill sizes="48px" className="object-cover" />
+              <Image src={th.url} alt="" fill sizes="48px" className="object-cover" />
             </button>
           </li>
         ))}

@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useSafeReducedMotion } from "@/components/motion/useSafeReducedMotion";
+import { t } from "@/lib/i18n";
+import { useLang } from "@/lib/use-lang";
 
 export interface VisitScene {
   url: string;
@@ -26,6 +28,7 @@ export function VisitStory({ scenes }: { scenes: VisitScene[] }) {
 }
 
 function ScrollVisit({ scenes }: { scenes: VisitScene[] }) {
+  const lang = useLang();
   const ref = useRef<HTMLDivElement>(null);
   const n = scenes.length;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
@@ -47,7 +50,7 @@ function ScrollVisit({ scenes }: { scenes: VisitScene[] }) {
         {/* Bandeau haut : titre de section + boussole */}
         <div className="container-x pointer-events-none absolute inset-x-0 top-[4.75rem] flex items-center justify-between md:top-28 md:justify-start md:gap-10">
           <p className="eyebrow flex items-center gap-3 text-phare">
-            <span className="h-px w-8 bg-phare" /> La visite
+            <span className="h-px w-8 bg-phare" /> {t(lang, "La visite", "The tour")}
           </p>
           <div className="flex items-center gap-3 text-sm text-ecume/80">
             <span className="font-serif text-2xl text-ecume">{String(active + 1).padStart(2, "0")}</span>
@@ -78,10 +81,10 @@ function ScrollVisit({ scenes }: { scenes: VisitScene[] }) {
         </div>
 
         <Link
-          href="/galerie"
+          href={lang === "en" ? "/en/gallery" : "/galerie"}
           className="absolute bottom-6 right-5 z-10 hidden items-center gap-2 rounded-full border border-ecume/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-ecume hover:text-marine md:right-10 md:inline-flex"
         >
-          Toutes les photos →
+          {t(lang, "Toutes les photos →", "All photos →")}
         </Link>
       </div>
     </div>
@@ -159,11 +162,12 @@ function Caption({ scene, index, total, progress }: { scene: VisitScene; index: 
 }
 
 function StaticVisit({ scenes }: { scenes: VisitScene[] }) {
+  const lang = useLang();
   return (
     <div className="bg-marine py-20 text-ecume">
       <div className="container-x space-y-14">
         <p className="eyebrow flex items-center gap-3 text-phare">
-          <span className="h-px w-8 bg-phare" /> La visite
+          <span className="h-px w-8 bg-phare" /> {t(lang, "La visite", "The tour")}
         </p>
         {scenes.map((s, i) => (
           <figure key={i} className="grid items-center gap-6 md:grid-cols-2">
